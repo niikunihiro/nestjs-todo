@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3000
+@todoID = 1
+
+GET {{baseUrl}}/
+
+###
+
+GET {{baseUrl}}/todo
+
+###
+
+GET {{baseUrl}}/todo/{{todoID}}
+
+###
+
+POST {{baseUrl}}/todo
+Content-Type: application/json
+
+{
+  "title": "hello my 2nd todo",
+  "content": "TODOの登録ですよいいいー"
+}
+
+###
+
+PUT {{baseUrl}}/todo/{{todoID}}
+Content-Type: application/json
+
+{
+  "title": "hello my first todo",
+  "content": "TODOの更新です2"
+}
+
+###
+
+DELETE {{baseUrl}}/todo/{{todoID}}
