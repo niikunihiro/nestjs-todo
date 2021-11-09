@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -14,7 +15,16 @@ import { Todo } from '../entity/todo.entity';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { GetTodosResponse } from './dto/todo.dto';
 
+@ApiBearerAuth()
+@ApiTags('todos')
 @Controller('todo')
 export class TodoController {
   constructor(
@@ -23,11 +33,15 @@ export class TodoController {
   ) {}
 
   @Get()
-  getTodos(): Promise<Todo[]> {
-    return this.todoService.getTodos();
+  @ApiOperation({ summary: 'Read todos' })
+  @ApiResponse({ status: HttpStatus.OK, type: GetTodosResponse })
+  async getTodos(): Promise<GetTodosResponse> {
+    const todo = await this.todoService.getTodos();
+    return { todo };
   }
 
   @Get(':id')
+  @ApiResponse({ status: HttpStatus.OK, type: Todo })
   async getTodo(@Param('id') id: number): Promise<Todo> {
     const todo = await this.todoService.getTodo(id);
     if (todo instanceof Todo) {
